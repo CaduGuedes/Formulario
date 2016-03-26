@@ -6,13 +6,10 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -39,7 +36,7 @@ public class TelaInicial extends AppCompatActivity {
     private DataBase dataBase;
     private SQLiteDatabase forms;
 
-    int codigo;
+    long codigo;
 
 
     @Override
@@ -69,6 +66,7 @@ public class TelaInicial extends AppCompatActivity {
         inserirForm = (Button) findViewById(R.id.inserirForm);
         buscarForm = (Button) findViewById(R.id.buscarForm);
 
+
         inserirForm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,10 +75,11 @@ public class TelaInicial extends AppCompatActivity {
                 Intent intent = new Intent(TelaInicial.this, PrimeiraPagina.class);
                 intent.putExtra("codigoID", codigo);
 
-                AlertDialog.Builder dlg = new AlertDialog.Builder(TelaInicial.this);
-                dlg.setMessage("VALOR DA ID QUE INICIA: " + codigo );
+                //MENSAGEM DE TESTE
+               /* AlertDialog.Builder dlg = new AlertDialog.Builder(TelaInicial.this);
+                dlg.setMessage("VALOR DA ID QUE INICIA: " + codigo);
                 dlg.setNeutralButton("OK", null);
-                dlg.show();
+                dlg.show();*/
 
                 startActivity(intent);
                 finish();
@@ -91,17 +90,12 @@ public class TelaInicial extends AppCompatActivity {
         buscarForm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // Intent intent = new Intent(TelaInicial.this, FormsCriados.class);
+                // Intent intent = new Intent(TelaInicial.this, FormsCriados.class);
                 //startActivity(intent);
-
                 mostrarNaTela();
-
-
 
             }
         });
-
-
     }
 
     private void mostrarNaTela(){ // Para Teste
@@ -118,11 +112,86 @@ public class TelaInicial extends AppCompatActivity {
         StringBuffer buffer = new StringBuffer();
         while(c.moveToNext()){
 
-            buffer.append("CIDADE: " + c.getString(1) + " NOME: " + c.getString(19) + " ID USADA: " + c.getString(0) + " \n ");
+            buffer.append("ID USADA: " + c.getString(0) +
+                    //Primeira Página
+                    "\nPrefeitura Municpal de " + c.getString(1) +
+                    "\n------------\nINSCRIÇÃO CADASTRAL\n------------\nDistrito: " + c.getString(2) +
+                    " Setor: " + c.getString(3) +
+                    " Quadra: " + c.getString(4) +
+                    " Lote: " + c.getString(5) +
+                    " Unidade: " + c.getString(6) +
+                    " \nINSCRIÇÃO ATERIOR\n------------\nDistrito: " + c.getString(7) +
+                    " Setor: " + c.getString(8) +
+                    " Quadra: " + c.getString(9) +
+                    " Lote: " + c.getString(10) +
+                    " Unidade: " + c.getString(11) +
+                    "\n------------\nLOCALIZAÇÃO \n------------\nLogadouro: " + c.getString(12) +
+                    " Bairro: " + c.getString(13) +
+                    " Número: " + c.getString(14) +
+                    " Complemento: " + c.getString(15) +
+                    " Loteamento: " + c.getString(16) +
+                    " Quadra: " + c.getString(17) +
+                    " Lote: " + c.getString(18) +
+                    //Segunda Página
+                    "\n------------\nSOBRE O PROPRIETÁRIO\n------------\nNome: " + c.getString(19) +
+                    "\nCPF: " + c.getString(20) +
+                    "\nEst. Civil: " + c.getString(21) +
+                    "\nCônjuge: " + c.getString(22) +
+                    "\nLogadouro: " + c.getString(23) +
+                    "\nTipo: " + c.getString(24) +
+                    " Número: " + c.getString(25) +
+                    "\nComplemento: " + c.getString(26) +
+                    " Bairro: " + c.getString(27) +
+                    "\nMunicípio: " + c.getString(28) +
+                    "\nCEP: " + c.getString(29) +
+                    "- UF: " + c.getString(30) +
+                    //testes Terceira Página
+                    "\n------------\nSOBRE O IMÓVEL\n------------\nOCUPAÇÃO: " + c.getString(31) +
+                    "\nUTILIZAÇÃO: " + c.getString(32) +
+                    "\nPATRIMONIO: " + c.getString(33) +
+                    "\nMURO: " + c.getString(34) +
+                    "\nPASSEIO: " + c.getString(35) +
+                    "\nANO: " + c.getString(36) +
+                    "\nIMUNE: " + c.getString(37) +
+                    "\nISENTO: " + c.getString(38) +
+                    //Teste Quarta Página
+                    "\n------------\nSOBRE O TERRENO\n------------\nSituaçao: " + c.getString(39) +
+                    "\nTopografia: " + c.getString(40) +
+                    "\nPedologia: " + c.getString(41) +
+                    //Teste Quinta Página
+                    "\n------------\nMEDIDAS DO IMÓVEL\n------------\nTestada Principal: " + c.getString(42) +
+                    "\nTestada2: " + c.getString(43) +
+                    "\nCódigo Testada2: " + c.getString(44) +
+                    "\nSeção Testada2: " + c.getString(45) +
+                    "\nTestada3: " + c.getString(46) +
+                    "\nCódigo Testada3: " + c.getString(47) +
+                    "\nSeção Testada3: " + c.getString(48) +
+                    "\nTestada4: " + c.getString(49) +
+                    "\nCódigo Testada4: " + c.getString(50) +
+                    "\nSeção Testada4: " + c.getString(51) +
+                    "\nÁrea do Terreno: " + c.getString(52) +
+                    "\nÁrea Const. da Unidade: " + c.getString(53) +
+                    "\nTotal de Unidades: " + c.getString(54) +
+                    "\nÁrea Total Construída: " + c.getString(55) +
+                    //Sexta Pagina
+                    "\n------------\nSOBRE EDIFICAÇÃO\n------------\nTipo: " + c.getString(56) +
+                    "\nAlinhamento: " + c.getString(57) +
+                    "\nPosição: " + c.getString(58) +
+                    "\nLocalização: " + c.getString(59) +
+                    "\nEstrutura: " + c.getString(60) +
+                    "\nCobertura: " + c.getString(61) +
+                    "\nParedes: " + c.getString(62) +
+                    "\nForro: " + c.getString(63) +
+                    "\nInst.Elétrica: " + c.getString(64) +
+                    "\nPiso: " + c.getString(65) +
+                    "\nPadrão: " + c.getString(66) +
+                    "\nCPF/CNPJ: " + c.getString(67) +
+
+                    " \n \n****************** ");
 
         }
         AlertDialog.Builder dlg1 = new AlertDialog.Builder(TelaInicial.this);
-        dlg1.setMessage("Detalhes do Contato:\n" + buffer.toString());
+        dlg1.setMessage("INFOS DE TESTE:\n" + buffer.toString());
         dlg1.setNeutralButton("OK", null);
         dlg1.show();
     }
@@ -154,29 +223,14 @@ public class TelaInicial extends AppCompatActivity {
         try {
             formulario = new Formulario();
 
-            formulario.setPREFEITURA("");
-            formulario.setDISTRITO1("");
-            formulario.setSETOR1("");
-            formulario.setQUADRA1("");
-            formulario.setLOTE1("");
-            formulario.setUNIDADE1("");
-            formulario.setDISTRITO2("");
-            formulario.setSETOR2("");
-            formulario.setQUADRA2("");
-            formulario.setLOTE2("");
-            formulario.setUNIDADE2("");
-            formulario.setNOME_LOGADOURO("");
-            formulario.setBAIRRO1("");
-            formulario.setNUMERO1("");
-            formulario.setCOMPLEMENTO1("");
-            formulario.setLOTEAMENTO1("");
-            formulario.setQUADRA_IMOVEL("");
-            formulario.setLOTE_IMOVEL("");
-            //Segunda Página
-            formulario.setNOME_PROPRIETARIO("");
-
             manipulaBanco.inserir(formulario);
 
+            //TRECHO EXTRAIDO DE: http://stackoverflow.com/questions/7575166/android-sqlite-get-last-insert-row-id
+            String query = "SELECT ROWID from FORMULARIO order by ROWID DESC limit 1";
+            Cursor c = forms.rawQuery(query, null);
+            if (c != null && c.moveToFirst()) {
+                codigo = c.getLong(0); //The 0 is the column index, we only have 1 column, so the index is 0
+            }
 
 
         }catch (Exception ex){
@@ -188,8 +242,6 @@ public class TelaInicial extends AppCompatActivity {
 
         }
         forms.close();
-
-        codigo = (int) formulario.get_ID();
 
     }
 

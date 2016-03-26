@@ -1,16 +1,15 @@
 package forms.caduguedes.formulariotopocad;
 
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -62,7 +61,7 @@ public class SegundaPagina extends AppCompatActivity {
     private DataBase dataBase;
     private SQLiteDatabase forms;
 
-    int codigo;
+    long codigo;
 
 
     @Override
@@ -70,7 +69,7 @@ public class SegundaPagina extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_segunda_pagina);
 
-        codigo = this.getIntent().getIntExtra("codigoID", 0);
+        codigo = this.getIntent().getLongExtra("codigoID", 0);
 
         //Criando a Referência pro meu BD
         try{
@@ -118,26 +117,17 @@ public class SegundaPagina extends AppCompatActivity {
         avancar2 = (Button) findViewById(R.id.avancar2);
         voltar2 = (Button) findViewById(R.id.voltar2);
 
-
+        inserirVolteiDaTerceira(codigo);
 
         avancar2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-
-                inserir(codigo);
-                Intent intent = new Intent(SegundaPagina.this, TelaInicial.class);
-
-
-                AlertDialog.Builder dlg = new AlertDialog.Builder(SegundaPagina.this);
-                dlg.setMessage("VALOR DA ID QUE SAI NA PRIMEIRA PAG: " + codigo);
-                dlg.setNeutralButton("OK", null);
-                dlg.show();
-
+                inserirSegundaPagina(codigo);
+                Intent intent = new Intent(SegundaPagina.this, TerceiraPagina.class); //ULTIMA PAGINA VOLTA PARA TELA INICIAL SEMPRE
+                intent.putExtra("codigoID", codigo);
                 startActivity(intent);
-
                 finish();
-
 
             }
         });
@@ -145,15 +135,12 @@ public class SegundaPagina extends AppCompatActivity {
         voltar2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SegundaPagina.this, PrimeiraPagina.class); // intent é a intenção de fazer algo, no caso troca de tela
+                Intent intent = new Intent(SegundaPagina.this, PrimeiraPagina.class);
+                intent.putExtra("codigoID", codigo);
                 startActivity(intent);
+                finish();
             }
         });
-
-
-
-
-
     }
 
     @Override
@@ -178,50 +165,50 @@ public class SegundaPagina extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private String selectEstadoCivil() {
+        String value = "Nada Consta";
+        int opcao = rgpEstadoCivil.getCheckedRadioButtonId();
+
+        if (opcao == R.id.rbtSolteiro) return rbtSolteiro.getText().toString();
+        else if (opcao == R.id.rbtCasado) return rbtCasado.getText().toString();
+        else if (opcao == R.id.rbtSeparado) return rbtSeparado.getText().toString();
+        else if (opcao == R.id.rbtDivorciado) return rbtDivorciado.getText().toString();
+        else if (opcao == R.id.rbtViuvo) return rbtViuvo.getText().toString();
+
+        return String.valueOf(value);
+    }
 
 
-    private void inserir(int codigoID){
+    private void inserirSegundaPagina(long codigoID) {
+
+        try {
+
+            String sql = "_id='" + codigoID + "'";
+            String[] campos = {"NOME_PROPRIETARIO", "CPF_PROPRIETARIO", "NOME_CONJUGE", "NOME_LOG_PROPRIETARIO",
+                    "TIPO_LOG_PROPRIETARIO", "NUM_LOG_PROPRIETARIO", "COMPLEMENTO_PROPRIETARIO", "BAIRRO_PROPRIETARIO",
+                    "MUNICIPIO_PROPRIETARIO", "CEP_PROPRIETARIO", "ESTADO_PROPRIETARIO"};
+
+            Cursor c = forms.query("FORMULARIO", campos, sql, null, null, null, null, null);
+
+            if (c.moveToFirst()) {
+                forms.execSQL("UPDATE FORMULARIO SET NOME_PROPRIETARIO='" + edtNomeProprietario.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET CPF_PROPRIETARIO='" + edtCPFProprietario.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET NOME_CONJUGE='" + edtNomeConjuge.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET NOME_LOG_PROPRIETARIO='" + edtNomeLogProprietario.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET TIPO_LOG_PROPRIETARIO='" + edtTipoLogProprietario.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET NUM_LOG_PROPRIETARIO='" + edtNumLogProprietario.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET COMPLEMENTO_PROPRIETARIO='" + edtComplemtoProprietario.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET BAIRRO_PROPRIETARIO='" + edtBairroProprietario.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET MUNICIPIO_PROPRIETARIO='" + edtMunicipioProprietario.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET CEP_PROPRIETARIO='" + edtCepProprietario.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET ESTADO_PROPRIETARIO='" + edtEstadoProprietario.getText() + "'  WHERE _id='" + codigoID + "'");
+
+                //RadioGroups RETORNOS
+                forms.execSQL("UPDATE FORMULARIO SET ESTADO_CIVIL='" + selectEstadoCivil() + "'  WHERE _id='" + codigoID + "'");
 
 
-
-            try {
-                ContentValues values = new ContentValues();
-              //  String sql = "_id='" + codigoID +"'";
-              //  String[] campos = {"PREFEITURA"};
-
-                //Cursor c = forms.query("FORMULARIO", campos, sql,null, null, null, null,null);
-              //  Cursor c = forms.rawQuery("SELECT * FROM FORMULARIO WHERE _id='" + codigoID +"'", null);
-
-              //  if(c.moveToFirst()) {
-
-                Cursor c = forms.rawQuery("SELECT * FROM FORMULARIO", null);
-                if(c.moveToFirst()){
-
-                    forms.execSQL("UPDATE FORMULARIO SET NOME_PROPRIETARIO='" + edtNomeProprietario.getText() + "'  WHERE _id='" + codigoID +"'");
-                    forms.insertOrThrow("FORMULARIO", null, values);
-                }c.close();
-
-              //      forms.execSQL("UPDATE FORMULARIO SET NOME_PROPRIETARIO='" + edtNomeProprietario.getText() + "'  WHERE _id='" + codigoID +"'");
-               // formulario = new Formulario();
-                    /*
-                    formulario.setNOME_PROPRIETARIO(edtNomeProprietario.getText().toString());
-                    formulario.setCPF_PROPRIETARIO(edtCPFProprietario.getText().toString());
-                    formulario.setNOME_CONJUGE(edtNomeConjuge.getText().toString());
-                    formulario.setNOME_LOG_PROPRIETARIO(edtNomeLogProprietario.getText().toString());
-                    formulario.setTIPO_LOG_PROPRIETARIO(edtTipoLogProprietario.getText().toString());
-                    formulario.setNUM_LOG_PROPRIETARIO(edtNumLogProprietario.getText().toString());
-                    formulario.setCOMPLEMENTO_PROPRIETARIO(edtComplemtoProprietario.getText().toString());
-                    formulario.setBAIRRO_PROPRIETARIO(edtBairroProprietario.getText().toString());
-                    formulario.setMUNICIPIO_PROPRIETARIO(edtMunicipioProprietario.getText().toString());
-                    formulario.setCEP_PROPRIETARIO(edtCepProprietario.getText().toString());
-                    formulario.setESTADO_PROPRIETARIO(edtEstadoProprietario.getText().toString());
-
-                    formulario.setESTADO_CIVIL(String.valueOf(rgpEstadoCivil.getCheckedRadioButtonId()));
-                  */
-
-
-                  //  manipulaBanco.inserir(formulario);
-             //  }c.close();
+            }
+            c.close();
 
             }catch (Exception ex){
 
@@ -231,8 +218,40 @@ public class SegundaPagina extends AppCompatActivity {
                 dlg.show();
 
             }
+    }
 
-        forms.close();
+
+    private void inserirVolteiDaTerceira(long codigoID) {
+
+        try {
+            forms = dataBase.getReadableDatabase();
+            Cursor c = forms.rawQuery("SELECT * FROM FORMULARIO WHERE _id='" + codigoID + "'", null);
+
+            if (c.moveToFirst()) {
+
+                edtNomeProprietario.setText(c.getString(19));
+                edtCPFProprietario.setText(c.getString(20));
+                edtNomeConjuge.setText(c.getString(22));
+                edtNomeLogProprietario.setText(c.getString(23));
+                edtTipoLogProprietario.setText(c.getString(24));
+                edtNumLogProprietario.setText(c.getString(25));
+                edtComplemtoProprietario.setText(c.getString(26));
+                edtBairroProprietario.setText(c.getString(27));
+                edtMunicipioProprietario.setText(c.getString(28));
+                edtCepProprietario.setText(c.getString(29));
+                edtEstadoProprietario.setText(c.getString(30));
+                //if(c.getString(21).equals("Solteiro(a)")) rbtSolteiro.setSelected(true);
+
+            }c.close();
+
+        }catch (Exception ex){
+
+            AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+            dlg.setMessage("Erro ao Inserir os Dados." + ex.getMessage());
+            dlg.setNeutralButton("OK", null);
+            dlg.show();
+
+        }
     }
 
 

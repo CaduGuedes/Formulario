@@ -1,22 +1,19 @@
 package forms.caduguedes.formulariotopocad;
 
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-
-import java.util.HashMap;
 
 import forms.caduguedes.formulariotopocad.database.DataBase;
 import forms.caduguedes.formulariotopocad.dominio.ManipulaBanco;
@@ -56,26 +53,21 @@ public class PrimeiraPagina extends AppCompatActivity {
     private DataBase dataBase;
     private SQLiteDatabase forms;
 
-    int codigo;
-
-
+    long codigo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_primeira_pagina);
 
-        codigo = this.getIntent().getIntExtra("codigoID", 0);
+        codigo = this.getIntent().getLongExtra("codigoID", 0);
 
         //Criando a Referência pro meu BD
         try{
 
             dataBase = new DataBase(this);
             forms = dataBase.getWritableDatabase();
-
-
             manipulaBanco = new ManipulaBanco(forms);
-
 
         }catch (SQLException ex){
 
@@ -106,26 +98,17 @@ public class PrimeiraPagina extends AppCompatActivity {
         edtQuadraImovel = (EditText) findViewById(R.id.edtQuadraImovel);
         edtLoteImovel = (EditText) findViewById(R.id.edtLoteImovel);
 
-
-
         //Recuperando Referências dos Buttons
-
         avancar1 = (Button) findViewById(R.id.avancar1);
+
 
         avancar1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 inserirPrimeiraPagina(codigo);
-
                 Intent intent = new Intent(PrimeiraPagina.this, SegundaPagina.class);
                 intent.putExtra("codigoID", codigo);
-
-                AlertDialog.Builder dlg = new AlertDialog.Builder(PrimeiraPagina.this);
-                dlg.setMessage("VALOR DA ID QUE SAI NA PRIMEIRA PAG: " + codigo );
-                dlg.setNeutralButton("OK", null);
-                dlg.show();
-
                 startActivity(intent);
                 finish();
 
@@ -133,6 +116,7 @@ public class PrimeiraPagina extends AppCompatActivity {
         });
 
 
+        inserirVolteiDaSegunda(codigo);
 
     }
 
@@ -159,53 +143,40 @@ public class PrimeiraPagina extends AppCompatActivity {
     }
 
 
-
-
-    private void inserirPrimeiraPagina(int codigoID){
-
+    private void inserirPrimeiraPagina(long codigoID) {
 
         try {
-            ContentValues values = new ContentValues();
-           // String sql = "_id='" + codigoID +"'";
-           // String[] campos = {"PREFEITURA"};
+            String sql = "_id='" + codigoID + "'";
+            String[] campos = {"PREFEITURA", "DISTRITO1", "SETOR1", "QUADRA1",
+                    "UNIDADE1", "DISTRITO2", "SETOR2", "QUADRA2",
+                    "LOTE2", "UNIDADE2", "NOME_LOGADOURO",
+                    "BAIRRO1", "NUMERO1", "COMPLEMENTO1",
+                    "LOTEAMENTO1", "QUADRA_IMOVEL", "LOTE_IMOVEL"};
 
-           // Cursor c = forms.query("FORMULARIO", campos, sql,null, null, null, null,null);
+            Cursor c = forms.query("FORMULARIO", campos, sql, null, null, null, null, null);
+            if (c.moveToFirst()) {
 
-       //     Cursor c = forms.rawQuery("SELECT * FROM FORMULARIO WHERE _id='" + codigoID +"'", null);
+                forms.execSQL("UPDATE FORMULARIO SET PREFEITURA='" + edtPrefeitura.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET DISTRITO1='" + edtDistrito1.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET SETOR1='" + edtSetor1.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET QUADRA1='" + edtQuadra1.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET LOTE1='" + edtLote1.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET UNIDADE1='" + edtUnidade1.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET DISTRITO2='" + edtDistrito2.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET SETOR2='" + edtSetor2.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET QUADRA2='" + edtQuadra2.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET LOTE2='" + edtLote2.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET UNIDADE2='" + edtUnidade2.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET NOME_LOGADOURO='" + edtNomeLogadouro.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET BAIRRO1='" + edtBairro1.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET NUMERO1='" + edtNumero1.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET COMPLEMENTO1='" + edtComplemento1.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET LOTEAMENTO1='" + edtLoteamento1.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET QUADRA_IMOVEL='" + edtQuadraImovel.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET LOTE_IMOVEL='" + edtLoteImovel.getText() + "'  WHERE _id='" + codigoID + "'");
 
-       //     if(c.moveToFirst()) {
 
-       //         forms.execSQL("UPDATE FORMULARIO SET PREFEITURA='" + edtPrefeitura.getText() + "'  WHERE _id='" + codigoID +"'");
-
-            Cursor c = forms.rawQuery("SELECT * FROM FORMULARIO", null);
-            if(c.moveToFirst()){
-
-                forms.execSQL("UPDATE FORMULARIO SET PREFEITURA='" + edtPrefeitura.getText() + "'  WHERE _id='" + codigoID +"'");
-                forms.insertOrThrow("FORMULARIO", null, values);
             }c.close();
-
-              /*
-                formulario.setPREFEITURA(edtPrefeitura.getText().toString());
-                formulario.setDISTRITO1(edtDistrito1.getText().toString());
-                formulario.setSETOR1(edtSetor1.getText().toString());
-                formulario.setQUADRA1(edtQuadra1.getText().toString());
-                formulario.setLOTE1(edtLote1.getText().toString());
-                formulario.setUNIDADE1(edtUnidade1.getText().toString());
-                formulario.setDISTRITO2(edtDistrito2.getText().toString());
-                formulario.setSETOR2(edtSetor2.getText().toString());
-                formulario.setQUADRA2(edtQuadra2.getText().toString());
-                formulario.setLOTE2(edtLote2.getText().toString());
-                formulario.setUNIDADE2(edtUnidade2.getText().toString());
-                formulario.setNOME_LOGADOURO(edtNomeLogadouro.getText().toString());
-                formulario.setBAIRRO1(edtBairro1.getText().toString());
-                formulario.setNUMERO1(edtNumero1.getText().toString());
-                formulario.setCOMPLEMENTO1(edtComplemento1.getText().toString());
-                formulario.setLOTEAMENTO1(edtLoteamento1.getText().toString());
-                formulario.setQUADRA_IMOVEL(edtQuadraImovel.getText().toString());
-                formulario.setLOTE_IMOVEL(edtLoteImovel.getText().toString());
-                */
-
-            // }c.close();
 
         }catch (Exception ex){
 
@@ -215,9 +186,40 @@ public class PrimeiraPagina extends AppCompatActivity {
             dlg.show();
 
              }
-        forms.close();
+        //forms.close();
 
         }
+
+
+    private void inserirVolteiDaSegunda(long codigoID) {
+
+        forms = dataBase.getReadableDatabase();
+        Cursor c = forms.rawQuery("SELECT * FROM FORMULARIO WHERE _id='" + codigoID + "'", null);
+
+        if (c.moveToFirst()) {
+
+            edtPrefeitura.setText(c.getString(1));
+            edtDistrito1.setText(c.getString(2));
+            edtSetor1.setText(c.getString(3));
+            edtQuadra1.setText(c.getString(4));
+            edtLote1.setText(c.getString(5));
+            edtUnidade1.setText(c.getString(6));
+            edtDistrito2.setText(c.getString(7));
+            edtSetor2.setText(c.getString(8));
+            edtQuadra2.setText(c.getString(9));
+            edtLote2.setText(c.getString(10));
+            edtUnidade2.setText(c.getString(11));
+            edtNomeLogadouro.setText(c.getString(12));
+            edtBairro1.setText(c.getString(13));
+            edtNumero1.setText(c.getString(14));
+            edtComplemento1.setText(c.getString(15));
+            edtLoteamento1.setText(c.getString(16));
+            edtQuadraImovel.setText(c.getString(17));
+            edtLoteImovel.setText(c.getString(18));
+
+        }
+        c.close();
+    }
 
 
 
