@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import forms.caduguedes.formulariotopocad.database.DataBase;
 import forms.caduguedes.formulariotopocad.dominio.ManipulaBanco;
@@ -27,6 +28,7 @@ public class SegundaPagina extends AppCompatActivity {
     private EditText edtNomeProprietario;
     private EditText edtCPFProprietario;
     private EditText edtNomeConjuge;
+    private EditText edtCPFConjuge;
     private EditText edtNomeLogProprietario;
     private EditText edtTipoLogProprietario;
     private EditText edtNumLogProprietario;
@@ -93,6 +95,7 @@ public class SegundaPagina extends AppCompatActivity {
         edtNomeProprietario = (EditText) findViewById(R.id.edtNomeProprietario);
         edtCPFProprietario = (EditText) findViewById(R.id.edtCPFProprietario);
         edtNomeConjuge = (EditText) findViewById(R.id.edtNomeConjuge);
+        edtCPFConjuge = (EditText) findViewById(R.id.edtCPFConjuge);
         edtNomeLogProprietario = (EditText) findViewById(R.id.edtNomeLogProprietario);
         edtTipoLogProprietario = (EditText) findViewById(R.id.edtTipoLogProprietario);
         edtNumLogProprietario = (EditText) findViewById(R.id.edtNumLogProprietario);
@@ -124,10 +127,18 @@ public class SegundaPagina extends AppCompatActivity {
             public void onClick(View v) {
 
                 inserirSegundaPagina(codigo);
-                Intent intent = new Intent(SegundaPagina.this, TerceiraPagina.class); //ULTIMA PAGINA VOLTA PARA TELA INICIAL SEMPRE
+                if(edtCPFProprietario.getText().toString().isEmpty() || edtNomeProprietario.getText().toString().isEmpty()
+                        || selectEstadoCivil().toString().equals("null") ){
+
+                    Toast.makeText(SegundaPagina.this, "Preencha os campos obrigatórios.(*)", Toast.LENGTH_SHORT).show();
+
+                }else{
+                Intent intent = new Intent(SegundaPagina.this, TerceiraPagina.class);
                 intent.putExtra("codigoID", codigo);
                 startActivity(intent);
                 finish();
+
+                }
 
             }
         });
@@ -135,12 +146,22 @@ public class SegundaPagina extends AppCompatActivity {
         voltar2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                inserirSegundaPagina(codigo);
                 Intent intent = new Intent(SegundaPagina.this, PrimeiraPagina.class);
                 intent.putExtra("codigoID", codigo);
                 startActivity(intent);
                 finish();
             }
         });
+    }
+    @Override
+    public void onBackPressed(){
+        inserirSegundaPagina(codigo);
+        Intent intent = new Intent(SegundaPagina.this, PrimeiraPagina.class);
+        intent.putExtra("codigoID", codigo);
+        startActivity(intent);
+        finish();
+
     }
 
     @Override
@@ -166,7 +187,7 @@ public class SegundaPagina extends AppCompatActivity {
     }
 
     private String selectEstadoCivil() {
-        String value = "Nada Consta";
+        String value = "null";
         int opcao = rgpEstadoCivil.getCheckedRadioButtonId();
 
         if (opcao == R.id.rbtSolteiro) return rbtSolteiro.getText().toString();
@@ -184,16 +205,18 @@ public class SegundaPagina extends AppCompatActivity {
         try {
 
             String sql = "_id='" + codigoID + "'";
-            String[] campos = {"NOME_PROPRIETARIO", "CPF_PROPRIETARIO", "NOME_CONJUGE", "NOME_LOG_PROPRIETARIO",
+            String[] campos = {"NOME_PROPRIETARIO", "CPF_PROPRIETARIO", "NOME_CONJUGE", "CPF_CONJUGE" , "NOME_LOG_PROPRIETARIO",
                     "TIPO_LOG_PROPRIETARIO", "NUM_LOG_PROPRIETARIO", "COMPLEMENTO_PROPRIETARIO", "BAIRRO_PROPRIETARIO",
                     "MUNICIPIO_PROPRIETARIO", "CEP_PROPRIETARIO", "ESTADO_PROPRIETARIO"};
 
             Cursor c = forms.query("FORMULARIO", campos, sql, null, null, null, null, null);
 
             if (c.moveToFirst()) {
+
                 forms.execSQL("UPDATE FORMULARIO SET NOME_PROPRIETARIO='" + edtNomeProprietario.getText() + "'  WHERE _id='" + codigoID + "'");
                 forms.execSQL("UPDATE FORMULARIO SET CPF_PROPRIETARIO='" + edtCPFProprietario.getText() + "'  WHERE _id='" + codigoID + "'");
                 forms.execSQL("UPDATE FORMULARIO SET NOME_CONJUGE='" + edtNomeConjuge.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET CPF_CONJUGE='" + edtCPFConjuge.getText() + "'  WHERE _id='" + codigoID + "'");
                 forms.execSQL("UPDATE FORMULARIO SET NOME_LOG_PROPRIETARIO='" + edtNomeLogProprietario.getText() + "'  WHERE _id='" + codigoID + "'");
                 forms.execSQL("UPDATE FORMULARIO SET TIPO_LOG_PROPRIETARIO='" + edtTipoLogProprietario.getText() + "'  WHERE _id='" + codigoID + "'");
                 forms.execSQL("UPDATE FORMULARIO SET NUM_LOG_PROPRIETARIO='" + edtNumLogProprietario.getText() + "'  WHERE _id='" + codigoID + "'");
@@ -232,6 +255,7 @@ public class SegundaPagina extends AppCompatActivity {
                 edtNomeProprietario.setText(c.getString(19));
                 edtCPFProprietario.setText(c.getString(20));
                 edtNomeConjuge.setText(c.getString(22));
+                edtCPFConjuge.setText(c.getString(67));
                 edtNomeLogProprietario.setText(c.getString(23));
                 edtTipoLogProprietario.setText(c.getString(24));
                 edtNumLogProprietario.setText(c.getString(25));
@@ -240,7 +264,15 @@ public class SegundaPagina extends AppCompatActivity {
                 edtMunicipioProprietario.setText(c.getString(28));
                 edtCepProprietario.setText(c.getString(29));
                 edtEstadoProprietario.setText(c.getString(30));
-                //if(c.getString(21).equals("Solteiro(a)")) rbtSolteiro.setSelected(true);
+                if(c.getString(21)!=null){
+
+                    if(c.getString(21).equals("Solteiro(a)")) rgpEstadoCivil.check(R.id.rbtSolteiro);
+                    else if(c.getString(21).equals("Casado(a)")) rgpEstadoCivil.check(R.id.rbtCasado);
+                    else if(c.getString(21).equals("Separado(a)")) rgpEstadoCivil.check(R.id.rbtSeparado);
+                    else if(c.getString(21).equals("Divorciado(a)")) rgpEstadoCivil.check(R.id.rbtDivorciado);
+                    else if(c.getString(21).equals("Viúvo(a)")) rgpEstadoCivil.check(R.id.rbtViuvo);
+
+                }
 
             }c.close();
 

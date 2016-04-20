@@ -25,6 +25,7 @@ public class TelaInicial extends AppCompatActivity {
 
     private Button inserirForm;
     private Button buscarForm;
+    private Button limparTXT;
 
     private ListView lstForms;
     private ArrayAdapter<String> adpFormularios;
@@ -51,7 +52,6 @@ public class TelaInicial extends AppCompatActivity {
 
             forms = dataBase.getWritableDatabase();
 
-
             manipulaBanco = new ManipulaBanco(forms);
 
 
@@ -65,6 +65,7 @@ public class TelaInicial extends AppCompatActivity {
 
         inserirForm = (Button) findViewById(R.id.inserirForm);
         buscarForm = (Button) findViewById(R.id.buscarForm);
+        limparTXT = (Button) findViewById(R.id.limparTXT);
 
 
         inserirForm.setOnClickListener(new View.OnClickListener() {
@@ -75,14 +76,8 @@ public class TelaInicial extends AppCompatActivity {
                 Intent intent = new Intent(TelaInicial.this, PrimeiraPagina.class);
                 intent.putExtra("codigoID", codigo);
 
-                //MENSAGEM DE TESTE
-               /* AlertDialog.Builder dlg = new AlertDialog.Builder(TelaInicial.this);
-                dlg.setMessage("VALOR DA ID QUE INICIA: " + codigo);
-                dlg.setNeutralButton("OK", null);
-                dlg.show();*/
-
                 startActivity(intent);
-                finish();
+                //finish();
 
             }
         });
@@ -96,24 +91,40 @@ public class TelaInicial extends AppCompatActivity {
 
             }
         });
+
+        limparTXT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent it = new Intent(TelaInicial.this, ManipulaForms.class);
+                startActivity(it);
+                //finish();
+
+            }
+        });
+
     }
 
     private void mostrarNaTela(){ // Para Teste
 
         forms = dataBase.getReadableDatabase();
 
-        Cursor c = forms.rawQuery("SELECT * FROM FORMULARIO", null);
+        Cursor c = forms.rawQuery("SELECT * FROM FORMULARIO WHERE PADRAO_EDI!='" + null + "'", null);
         if(c.getCount()==0){
             AlertDialog.Builder dlg = new AlertDialog.Builder(TelaInicial.this);
-            dlg.setMessage("ERRO. Nada encontrado.");
+            dlg.setMessage("Nada encontrado.");
             dlg.setNeutralButton("OK", null);
             dlg.show();
         }
         StringBuffer buffer = new StringBuffer();
         while(c.moveToNext()){
 
-            buffer.append("ID USADA: " + c.getString(0) +
+            buffer.append(//"ID USADA: " + c.getString(0) +
                     //Primeira Página
+                    "\nGeoCodigo Lote: " + c.getString(68) +
+                            "\nGeoCodigo Área 1: " + c.getString(69) +
+                            "\nGeoCodigo Área 2: " + c.getString(70) +
+                            "\nGeoCodigo Área 3: " + c.getString(71) +
                     "\nPrefeitura Municpal de " + c.getString(1) +
                     "\n------------\nINSCRIÇÃO CADASTRAL\n------------\nDistrito: " + c.getString(2) +
                     " Setor: " + c.getString(3) +
@@ -137,6 +148,7 @@ public class TelaInicial extends AppCompatActivity {
                     "\nCPF: " + c.getString(20) +
                     "\nEst. Civil: " + c.getString(21) +
                     "\nCônjuge: " + c.getString(22) +
+                            "\nCPF do Cônjuge: " + c.getString(67) +
                     "\nLogadouro: " + c.getString(23) +
                     "\nTipo: " + c.getString(24) +
                     " Número: " + c.getString(25) +
@@ -144,7 +156,7 @@ public class TelaInicial extends AppCompatActivity {
                     " Bairro: " + c.getString(27) +
                     "\nMunicípio: " + c.getString(28) +
                     "\nCEP: " + c.getString(29) +
-                    "- UF: " + c.getString(30) +
+                            " - UF: " + c.getString(30) +
                     //testes Terceira Página
                     "\n------------\nSOBRE O IMÓVEL\n------------\nOCUPAÇÃO: " + c.getString(31) +
                     "\nUTILIZAÇÃO: " + c.getString(32) +
@@ -152,8 +164,8 @@ public class TelaInicial extends AppCompatActivity {
                     "\nMURO: " + c.getString(34) +
                     "\nPASSEIO: " + c.getString(35) +
                     "\nANO: " + c.getString(36) +
-                    "\nIMUNE: " + c.getString(37) +
-                    "\nISENTO: " + c.getString(38) +
+                            "\nIPTU Imune/Isento: " + c.getString(37) +
+                            "\nTSU Isento: " + c.getString(38) +
                     //Teste Quarta Página
                     "\n------------\nSOBRE O TERRENO\n------------\nSituaçao: " + c.getString(39) +
                     "\nTopografia: " + c.getString(40) +
@@ -182,16 +194,17 @@ public class TelaInicial extends AppCompatActivity {
                     "\nCobertura: " + c.getString(61) +
                     "\nParedes: " + c.getString(62) +
                     "\nForro: " + c.getString(63) +
+                            "\nRevest. Externo: " + c.getString(72) +
+                            "\nInst.Sanitária: " + c.getString(73) +
                     "\nInst.Elétrica: " + c.getString(64) +
                     "\nPiso: " + c.getString(65) +
                     "\nPadrão: " + c.getString(66) +
-                    "\nCPF/CNPJ: " + c.getString(67) +
 
-                    " \n \n****************** ");
+                            " \n \n************************************ ");
 
         }
         AlertDialog.Builder dlg1 = new AlertDialog.Builder(TelaInicial.this);
-        dlg1.setMessage("INFOS DE TESTE:\n" + buffer.toString());
+        dlg1.setMessage("FORMULÁRIOS:\n" + buffer.toString());
         dlg1.setNeutralButton("OK", null);
         dlg1.show();
     }
@@ -244,6 +257,5 @@ public class TelaInicial extends AppCompatActivity {
         forms.close();
 
     }
-
-
 }
+

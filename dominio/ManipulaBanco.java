@@ -1,10 +1,8 @@
 package forms.caduguedes.formulariotopocad.dominio;
 
 import android.content.ContentValues;
-import android.content.Context;
-import android.database.*;
-import android.database.sqlite.*;
-import android.widget.*;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 import forms.caduguedes.formulariotopocad.dominio.entidades.Formulario;
 
@@ -23,7 +21,7 @@ public class ManipulaBanco {
 
     public int inserir(Formulario formulario){
         ContentValues values = new ContentValues();
-
+        //Primeira Página 18 itens
         values.put("PREFEITURA", formulario.getPREFEITURA());
         values.put("DISTRITO1", formulario.getDISTRITO1());
         values.put("SETOR1", formulario.getSETOR1());
@@ -42,6 +40,7 @@ public class ManipulaBanco {
         values.put("LOTEAMENTO1", formulario.getLOTEAMENTO1());
         values.put("QUADRA_IMOVEL", formulario.getQUADRA_IMOVEL());
         values.put("LOTE_IMOVEL", formulario.getLOTE_IMOVEL());
+        //Segunda Página 12 itens
         values.put("NOME_PROPRIETARIO", formulario.getNOME_PROPRIETARIO());
         values.put("CPF_PROPRIETARIO", formulario.getCPF_PROPRIETARIO());
         values.put("ESTADO_CIVIL", formulario.getESTADO_CIVIL());
@@ -51,18 +50,23 @@ public class ManipulaBanco {
         values.put("NUM_LOG_PROPRIETARIO", formulario.getNUM_LOG_PROPRIETARIO());
         values.put("COMPLEMENTO_PROPRIETARIO", formulario.getCOMPLEMENTO_PROPRIETARIO());
         values.put("BAIRRO_PROPRIETARIO", formulario.getBAIRRO_PROPRIETARIO());
+        values.put("MUNICIPIO_PROPRIETARIO", formulario.getMUNICIPIO_PROPRIETARIO());
         values.put("CEP_PROPRIETARIO", formulario.getCEP_PROPRIETARIO());
         values.put("ESTADO_PROPRIETARIO", formulario.getESTADO_PROPRIETARIO());
+        //Terceira Página 8itens
         values.put("OCUPACAO_IMOVEL", formulario.getOCUPACAO_IMOVEL());
+        values.put("UTILIZA_IMOVEL", formulario.getUTILIZA_IMOVEL());
         values.put("PATRIMON_IMOVEL", formulario.getPATRIMON_IMOVEL());
         values.put("MUROCERCA_IMOVEL", formulario.getMUROCERCA_IMOVEL());
         values.put("PASSEIO_IMOVEL", formulario.getPASSEIO_IMOVEL());
         values.put("ANO_REF_IMOVEL", formulario.getANO_REF_IMOVEL());
         values.put("IMUNE_IPTU_IMOVEL", formulario.getIMUNE_IPTU_IMOVEL());
-        values.put("ISENTO_IPTU_IMOVEL", formulario.getISENTO_IPTU_IMOVEL());
+        values.put("ISENTO_TSU_IMOVEL", formulario.getISENTO_TSU_IMOVEL());
+        //Quarta Página 3 itens
         values.put("SITUACAO_TER", formulario.getSITUACAO_TER());
         values.put("TOPOGRAFIA_TER", formulario.getTOPOGRAFIA_TER());
         values.put("PEDOLOGIA_TER", formulario.getPEDOLOGIA_TER());
+        //Quinta Página
         values.put("TESTADA_PRINCIPAL", formulario.getTESTADA_PRINCIPAL());
         values.put("TESTADA2", formulario.getTESTADA2());
         values.put("COD_TESTADA2", formulario.getCOD_TESTADA2());
@@ -77,6 +81,7 @@ public class ManipulaBanco {
         values.put("AREA_CONST_UNI", formulario.getAREA_CONST_UNI());
         values.put("TOTAL_UNIDADES", formulario.getTOTAL_UNIDADES());
         values.put("AREA_TOTAL_CONST", formulario.getAREA_TOTAL_CONST());
+        //Sexta Página 12 itens
         values.put("TIPO_EDI", formulario.getTIPO_EDI());
         values.put("ALINHAMENTO_EDI", formulario.getALINHAMENTO_EDI());
         values.put("POSICAO_EDI", formulario.getPOSICAO_EDI());
@@ -85,10 +90,17 @@ public class ManipulaBanco {
         values.put("COBERTURA_EDI", formulario.getCOBERTURA_EDI());
         values.put("PAREDES_EDI", formulario.getPAREDES_EDI());
         values.put("FORRO_EDI", formulario.getFORRO_EDI());
+        values.put("REVEST_EDI", formulario.getREVEST_EDI());
+        values.put("SANIT_EDI", formulario.getSANIT_EDI());
         values.put("ELETRIC_EDI", formulario.getELETRIC_EDI());
         values.put("PISO_EDI", formulario.getPISO_EDI());
         values.put("PADRAO_EDI", formulario.getPADRAO_EDI());
-        values.put("CPF_CNPJ", formulario.getCPF_CNPJ());
+        values.put("CPF_CONJUGE", formulario.getCPF_CONJUGE());
+        values.put("GEO_CODIGO", formulario.getGEO_CODIGO());
+        values.put("GEO_CODIGO1", formulario.getGEO_CODIGO1());
+        values.put("GEO_CODIGO2", formulario.getGEO_CODIGO2());
+        values.put("GEO_CODIGO3", formulario.getGEO_CODIGO3());
+
 
 
         forms.insertOrThrow("FORMULARIO", null, values);

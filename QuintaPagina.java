@@ -111,12 +111,22 @@ public class QuintaPagina extends AppCompatActivity {
         voltar5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                inserirQuintaPagina(codigo);
                 Intent intent = new Intent(QuintaPagina.this, QuartaPagina.class);
                 intent.putExtra("codigoID", codigo);
                 startActivity(intent);
                 finish();
             }
         });
+    }
+    @Override
+    public void onBackPressed(){
+        inserirQuintaPagina(codigo);
+        Intent intent = new Intent(QuintaPagina.this, QuartaPagina.class);
+        intent.putExtra("codigoID", codigo);
+        startActivity(intent);
+        finish();
+
     }
 
     private void inserirQuintaPagina(long codigoID) {

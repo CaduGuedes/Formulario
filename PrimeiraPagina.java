@@ -1,6 +1,8 @@
 package forms.caduguedes.formulariotopocad;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -14,14 +16,19 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import forms.caduguedes.formulariotopocad.database.DataBase;
 import forms.caduguedes.formulariotopocad.dominio.ManipulaBanco;
 import forms.caduguedes.formulariotopocad.dominio.entidades.Formulario;
 
-public class PrimeiraPagina extends AppCompatActivity {
+public class PrimeiraPagina extends AppCompatActivity implements DialogInterface.OnClickListener {
 
     //Declarando os EditText
+    private EditText edtGeoCodigoLote;
+    private EditText edtGeocodigo1;
+    private EditText edtGeocodigo2;
+    private EditText edtGeocodigo3;
     private EditText edtPrefeitura;
     private EditText edtDistrito1;
     private EditText edtSetor1;
@@ -62,6 +69,7 @@ public class PrimeiraPagina extends AppCompatActivity {
 
         codigo = this.getIntent().getLongExtra("codigoID", 0);
 
+
         //Criando a Referência pro meu BD
         try{
 
@@ -79,6 +87,10 @@ public class PrimeiraPagina extends AppCompatActivity {
 
 
         //Declaração dos EditText
+        edtGeoCodigoLote = (EditText) findViewById(R.id.edtGeoCodigoLote);
+        edtGeocodigo1 = (EditText) findViewById(R.id.edtGeocodigo1);
+        edtGeocodigo2 = (EditText) findViewById(R.id.edtGeocodigo2);
+        edtGeocodigo3 = (EditText) findViewById(R.id.edtGeocodigo3);
         edtPrefeitura = (EditText) findViewById(R.id.edtPrefeitura);
         edtDistrito1 = (EditText) findViewById(R.id.edtDistrito1);
         edtSetor1 = (EditText) findViewById(R.id.edtSetor1);
@@ -120,12 +132,18 @@ public class PrimeiraPagina extends AppCompatActivity {
 
     }
 
+    private void ButtonDialog() {
+
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_tela_inicial, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -142,12 +160,41 @@ public class PrimeiraPagina extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Deseja fechar o formulário?")
+                .setPositiveButton("Sim", this)
+                .setNegativeButton("Não", this);
+        Dialog dialog = builder.create();
+        dialog.show();
+    }
+
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+        switch (which) {
+            case DialogInterface.BUTTON_POSITIVE:
+                dialog.cancel();
+                Toast.makeText(this, "Ediçoes Descartadas.", Toast.LENGTH_SHORT).show();
+                finish();
+                break;
+            case DialogInterface.BUTTON_NEGATIVE:
+                break;
+            default:
+                break;
+
+        }
+
+
+    }
+
 
     private void inserirPrimeiraPagina(long codigoID) {
 
         try {
             String sql = "_id='" + codigoID + "'";
-            String[] campos = {"PREFEITURA", "DISTRITO1", "SETOR1", "QUADRA1",
+            String[] campos = {"PREFEITURA", "GEO_CODIGO", "GEO_CODIGO1", "GEO_CODIGO2",
+                    "GEO_CODIGO3", "DISTRITO1", "SETOR1", "QUADRA1",
                     "UNIDADE1", "DISTRITO2", "SETOR2", "QUADRA2",
                     "LOTE2", "UNIDADE2", "NOME_LOGADOURO",
                     "BAIRRO1", "NUMERO1", "COMPLEMENTO1",
@@ -156,6 +203,10 @@ public class PrimeiraPagina extends AppCompatActivity {
             Cursor c = forms.query("FORMULARIO", campos, sql, null, null, null, null, null);
             if (c.moveToFirst()) {
 
+                forms.execSQL("UPDATE FORMULARIO SET GEO_CODIGO='" + edtGeoCodigoLote.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET GEO_CODIGO1='" + edtGeocodigo1.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET GEO_CODIGO2='" + edtGeocodigo2.getText() + "'  WHERE _id='" + codigoID + "'");
+                forms.execSQL("UPDATE FORMULARIO SET GEO_CODIGO3='" + edtGeocodigo3.getText() + "'  WHERE _id='" + codigoID + "'");
                 forms.execSQL("UPDATE FORMULARIO SET PREFEITURA='" + edtPrefeitura.getText() + "'  WHERE _id='" + codigoID + "'");
                 forms.execSQL("UPDATE FORMULARIO SET DISTRITO1='" + edtDistrito1.getText() + "'  WHERE _id='" + codigoID + "'");
                 forms.execSQL("UPDATE FORMULARIO SET SETOR1='" + edtSetor1.getText() + "'  WHERE _id='" + codigoID + "'");
@@ -198,6 +249,10 @@ public class PrimeiraPagina extends AppCompatActivity {
 
         if (c.moveToFirst()) {
 
+            edtGeoCodigoLote.setText(c.getString(68));
+            edtGeocodigo1.setText(c.getString(69));
+            edtGeocodigo2.setText(c.getString(70));
+            edtGeocodigo3.setText(c.getString(71));
             edtPrefeitura.setText(c.getString(1));
             edtDistrito1.setText(c.getString(2));
             edtSetor1.setText(c.getString(3));
@@ -220,7 +275,6 @@ public class PrimeiraPagina extends AppCompatActivity {
         }
         c.close();
     }
-
 
 
 

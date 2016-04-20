@@ -5,7 +5,8 @@ package forms.caduguedes.formulariotopocad.dominio.entidades;
  */
 public class Formulario { //MAPEAMENTO OBJETO RELACIONAL
 
-    private long _ID=1;
+    private long _ID;
+
     private String PREFEITURA;
     private String DISTRITO1;
     private String SETOR1;
@@ -24,6 +25,7 @@ public class Formulario { //MAPEAMENTO OBJETO RELACIONAL
     private String LOTEAMENTO1;
     private String QUADRA_IMOVEL;
     private String LOTE_IMOVEL;
+    //Segunda Pagina
     private String NOME_PROPRIETARIO;
     private String CPF_PROPRIETARIO;
     private String ESTADO_CIVIL;
@@ -36,16 +38,20 @@ public class Formulario { //MAPEAMENTO OBJETO RELACIONAL
     private String MUNICIPIO_PROPRIETARIO;
     private String CEP_PROPRIETARIO;
     private String ESTADO_PROPRIETARIO;
+    //Terceira Pagina
     private String OCUPACAO_IMOVEL;
+    private String UTILIZA_IMOVEL;
     private String PATRIMON_IMOVEL;
     private String MUROCERCA_IMOVEL;
     private String PASSEIO_IMOVEL;
     private String ANO_REF_IMOVEL;
     private String IMUNE_IPTU_IMOVEL;
-    private String ISENTO_IPTU_IMOVEL;
+    private String ISENTO_TSU_IMOVEL;
+    //Quarta Pagina
     private String SITUACAO_TER;
     private String TOPOGRAFIA_TER;
     private String PEDOLOGIA_TER;
+    //Quinta Pagina
     private String TESTADA_PRINCIPAL;
     private String TESTADA2;
     private String COD_TESTADA2;
@@ -60,6 +66,7 @@ public class Formulario { //MAPEAMENTO OBJETO RELACIONAL
     private String AREA_CONST_UNI;
     private String TOTAL_UNIDADES;
     private String AREA_TOTAL_CONST;
+    //Sexta Pagina
     private String TIPO_EDI;
     private String ALINHAMENTO_EDI;
     private String POSICAO_EDI;
@@ -68,15 +75,19 @@ public class Formulario { //MAPEAMENTO OBJETO RELACIONAL
     private String COBERTURA_EDI;
     private String PAREDES_EDI;
     private String FORRO_EDI;
+    private String REVEST_EDI;
+    private String SANIT_EDI;
     private String ELETRIC_EDI;
     private String PISO_EDI;
     private String PADRAO_EDI;
-    private String CPF_CNPJ;
+    private String CPF_CONJUGE;
+    private String GEO_CODIGO;
+    private String GEO_CODIGO1;
+    private String GEO_CODIGO2;
+    private String GEO_CODIGO3;
 
 
     /*public Formulario{ //Construtor
-
-
     }*/
 
     public long get_ID() {
@@ -335,12 +346,12 @@ public class Formulario { //MAPEAMENTO OBJETO RELACIONAL
         this.IMUNE_IPTU_IMOVEL = IMUNE_IPTU_IMOVEL;
     }
 
-    public String getISENTO_IPTU_IMOVEL() {
-        return ISENTO_IPTU_IMOVEL;
+    public String getISENTO_TSU_IMOVEL() {
+        return ISENTO_TSU_IMOVEL;
     }
 
-    public void setISENTO_IPTU_IMOVEL(String ISENTO_IPTU_IMOVEL) {
-        this.ISENTO_IPTU_IMOVEL = ISENTO_IPTU_IMOVEL;
+    public void setISENTO_TSU_IMOVEL(String ISENTO_TSU_IMOVEL) {
+        this.ISENTO_TSU_IMOVEL = ISENTO_TSU_IMOVEL;
     }
 
     public String getSITUACAO_TER() {
@@ -567,12 +578,12 @@ public class Formulario { //MAPEAMENTO OBJETO RELACIONAL
         this.PADRAO_EDI = PADRAO_EDI;
     }
 
-    public String getCPF_CNPJ() {
-        return CPF_CNPJ;
+    public String getCPF_CONJUGE() {
+        return CPF_CONJUGE;
     }
 
-    public void setCPF_CNPJ(String CPF_CNPJ) {
-        this.CPF_CNPJ = CPF_CNPJ;
+    public void setCPF_CONJUGE(String CPF_CONJUGE) {
+        this.CPF_CONJUGE = CPF_CONJUGE;
     }
 
     public String getDISTRITO1() {
@@ -615,9 +626,64 @@ public class Formulario { //MAPEAMENTO OBJETO RELACIONAL
         this.MUNICIPIO_PROPRIETARIO = MUNICIPIO_PROPRIETARIO;
     }
 
+    public String getUTILIZA_IMOVEL() {
+        return UTILIZA_IMOVEL;
+    }
+
+    public void setUTILIZA_IMOVEL(String UTILIZA_IMOVEL) {
+        this.UTILIZA_IMOVEL = UTILIZA_IMOVEL;
+    }
+
     @Override
     public String toString(){
+        return "CIDADE: " + PREFEITURA;
+    }
 
-        return "CIDADE: " + PREFEITURA + " NOME: " + NOME_PROPRIETARIO + " ID USADA: " + _ID;
+    public String getGEO_CODIGO() {
+        return GEO_CODIGO;
+    }
+
+    public void setGEO_CODIGO(String GEO_CODIGO) {
+        this.GEO_CODIGO = GEO_CODIGO;
+    }
+
+    public String getGEO_CODIGO1() {
+        return GEO_CODIGO1;
+    }
+
+    public void setGEO_CODIGO1(String GEO_CODIGO1) {
+        this.GEO_CODIGO1 = GEO_CODIGO1;
+    }
+
+    public String getGEO_CODIGO2() {
+        return GEO_CODIGO2;
+    }
+
+    public void setGEO_CODIGO2(String GEO_CODIGO2) {
+        this.GEO_CODIGO2 = GEO_CODIGO2;
+    }
+
+    public String getGEO_CODIGO3() {
+        return GEO_CODIGO3;
+    }
+
+    public void setGEO_CODIGO3(String GEO_CODIGO3) {
+        this.GEO_CODIGO3 = GEO_CODIGO3;
+    }
+
+    public String getREVEST_EDI() {
+        return REVEST_EDI;
+    }
+
+    public void setREVEST_EDI(String REVEST_EDI) {
+        this.REVEST_EDI = REVEST_EDI;
+    }
+
+    public String getSANIT_EDI() {
+        return SANIT_EDI;
+    }
+
+    public void setSANIT_EDI(String SANIT_EDI) {
+        this.SANIT_EDI = SANIT_EDI;
     }
 }
